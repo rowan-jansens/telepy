@@ -7,6 +7,7 @@ import serial
 import time
 
 
+
 import pyqtgraph as pg
 
 
@@ -44,15 +45,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
 
-    ser = serial.Serial("COM4", 115200)  # change COM# if necessary
-    time.sleep(2)
-    ser.flushInput
-
-
+    
     app = QtWidgets.QApplication([])
 
     GC = MainWindow()
     GC.resize(800, 600)
+
+    ser = serial.Serial("COM4", 115200)  # change COM# if necessary
+    time.sleep(2)
+    ser.flushInput
 
 
     data_entries = 7
@@ -60,10 +61,11 @@ if __name__ == "__main__":
     data = np.zeros([data_buffer, data_entries], dtype = np.float64)
     x = np.arange(-1 * data_buffer, 0, 1)
 
-    i = 0
-    def update():
- 
-        global GC, data, x, data_rate
+
+
+
+    def fetch_serial_data():
+        global GC, data, x, data_rate, ser
         while (ser.in_waiting > 0):
             line = ser.readline()
             line = np.asarray(line.decode().rstrip('\n').split(","), dtype=np.single)
@@ -83,7 +85,7 @@ if __name__ == "__main__":
 
 
     timer = QtCore.QTimer()
-    timer.timeout.connect(update)
+    timer.timeout.connect(fetch_serial_data)
     timer.start(10)
 
 
