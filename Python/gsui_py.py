@@ -80,64 +80,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.connect_button = QPushButton(self.centralwidget)
-        self.connect_button.setObjectName(u"connect_button")
-        self.connect_button.setStyleSheet(u"QPushButton {\n"
-"	background-color: rgb(85, 170, 255);\n"
-"	border: none;\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(67, 135, 202)\n"
-"	border: none;\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"	background-color: rgb(85, 170, 0)\n"
-"	border: none;\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout.addWidget(self.connect_button, 0, 0, 1, 1)
-
         self.serial_port = QComboBox(self.centralwidget)
         self.serial_port.setObjectName(u"serial_port")
 
         self.gridLayout.addWidget(self.serial_port, 0, 1, 1, 1)
-
-        self.disconnect_button = QPushButton(self.centralwidget)
-        self.disconnect_button.setObjectName(u"disconnect_button")
-        self.disconnect_button.setStyleSheet(u"QPushButton {\n"
-"	background-color: rgb(255, 85, 0);\n"
-"	border: none;\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(67, 135, 202)\n"
-"	border: none;\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"	background-color: rgb(85, 170, 0)\n"
-"	border: none;\n"
-"	color: rgb(255, 255, 255);\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout.addWidget(self.disconnect_button, 2, 0, 1, 1)
 
         self.serial_baud = QComboBox(self.centralwidget)
         self.serial_baud.addItem("")
@@ -177,6 +123,85 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.resize_button, 3, 0, 1, 2)
 
+        self.disconnect_button = QPushButton(self.centralwidget)
+        self.disconnect_button.setObjectName(u"disconnect_button")
+        self.disconnect_button.setStyleSheet(u"QPushButton {\n"
+"	background-color: rgb(255, 85, 0);\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(67, 135, 202)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"	background-color: rgb(85, 170, 0)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout.addWidget(self.disconnect_button, 2, 0, 1, 1)
+
+        self.connect_button = QPushButton(self.centralwidget)
+        self.connect_button.setObjectName(u"connect_button")
+        self.connect_button.setStyleSheet(u"QPushButton {\n"
+"	background-color: rgb(85, 170, 255);\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(67, 135, 202)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"	background-color: rgb(85, 170, 0)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout.addWidget(self.connect_button, 0, 0, 1, 1)
+
+        self.save_button = QPushButton(self.centralwidget)
+        self.save_button.setObjectName(u"save_button")
+        self.save_button.setStyleSheet(u"QPushButton {\n"
+"	background-color: rgb(117, 117, 117);\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(67, 135, 202)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"	background-color: rgb(85, 170, 0)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}")
+
+        self.gridLayout.addWidget(self.save_button, 4, 0, 1, 2)
+
 
         self.gridLayout_2.addLayout(self.gridLayout, 0, 2, 1, 1)
 
@@ -211,8 +236,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.connect_button.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
-        self.disconnect_button.setText(QCoreApplication.translate("MainWindow", u" Disconnect ", None))
         self.serial_baud.setItemText(0, QCoreApplication.translate("MainWindow", u"9600", None))
         self.serial_baud.setItemText(1, QCoreApplication.translate("MainWindow", u"14400", None))
         self.serial_baud.setItemText(2, QCoreApplication.translate("MainWindow", u"19200", None))
@@ -223,6 +246,9 @@ class Ui_MainWindow(object):
         self.serial_baud.setItemText(7, QCoreApplication.translate("MainWindow", u"115200", None))
 
         self.resize_button.setText(QCoreApplication.translate("MainWindow", u"Resize All Plots", None))
+        self.disconnect_button.setText(QCoreApplication.translate("MainWindow", u" Disconnect ", None))
+        self.connect_button.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
+        self.save_button.setText(QCoreApplication.translate("MainWindow", u"Save", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u" Phenoix VI Ground Controll ", None))
     # retranslateUi
 

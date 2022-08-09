@@ -38,6 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.connect_button.clicked.connect(self.open_serial)
         self.ui.disconnect_button.clicked.connect(self.close_serial)
         self.ui.resize_button.clicked.connect(self.resize_plots)
+        self.ui.save_button.clicked.connect(self.add_data_to_file)
 
         self.ui.Accel.addLegend()
         self.ui.Accel.setTitle("Acceleraion", color=[85, 170, 255], size="12pt")
@@ -58,8 +59,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def open_serial(self):
-        with open('data.txt', 'w') as f:
-            f.write("mm,ax,ay,az,gx,gy,gz,\n")
+        global file_name
+        time_struct = time.gmtime()
+        file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(time.time())[-5:-1] + ".txt"
+        print(file_name)
+        with open(file_name, 'w') as f:
+            f.write("time,ax,ay,az,gx,gy,gz,\n")
 
 
         
@@ -103,7 +108,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.data_rate = 1
             if self.num_lines_read > self.data_buffer:
                 self.add_data_to_file()
-                self.num_lines_read = 0
         print(self.num_lines_read)
         
         GC.update_plot("x_accel", self.x / self.data_rate, self.data_array[:,1])
@@ -115,9 +119,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def add_data_to_file(self):
-        with open('data.txt', 'a') as f:
-            f.writelines(np.array2string(self.data_array, separator=',', edgeitems=300).replace('[','').replace(']',''))
+        with open(file_name, 'a') as f:
+            f.writelines(np.array2string(self.data_array[-self.num_lines_read:, :], separator=',', edgeitems=300, max_line_width=300).replace('[','').replace(']',''))
             f.write('\n')
+        self.num_lines_read = 0
 
 
 
