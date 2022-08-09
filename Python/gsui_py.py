@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QMenuBar,
-    QSizePolicy, QStatusBar, QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QMainWindow,
+    QMenuBar, QPushButton, QSizePolicy, QStatusBar,
+    QTabWidget, QWidget)
 
 from pyqtgraph import PlotWidget
 
@@ -24,26 +25,95 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(943, 622)
-        MainWindow.setStyleSheet(u"background-color: rgb(62, 62, 62);")
+        MainWindow.resize(893, 638)
+        MainWindow.setStyleSheet(u"QMainWindow#MainWindow{\n"
+"background-color:rgb(85, 170, 255)\n"
+"}")
+        MainWindow.setTabShape(QTabWidget.Rounded)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"QWidget#centralwidget{\n"
+"	background-color: rgb(58, 58, 58);\n"
+"}")
+        self.gridLayoutWidget = QWidget(self.centralwidget)
+        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        self.gridLayoutWidget.setGeometry(QRect(160, 230, 581, 331))
+        self.gridLayout_2 = QGridLayout(self.gridLayoutWidget)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.Accel = PlotWidget(self.gridLayoutWidget)
+        self.Accel.setObjectName(u"Accel")
+
+        self.gridLayout_2.addWidget(self.Accel, 0, 0, 1, 1)
+
+        self.Gyro = PlotWidget(self.gridLayoutWidget)
+        self.Gyro.setObjectName(u"Gyro")
+
+        self.gridLayout_2.addWidget(self.Gyro, 1, 0, 1, 1)
+
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(10, 10, 391, 31))
+        self.label.setGeometry(QRect(10, 10, 411, 51))
         self.label.setStyleSheet(u"font: 26pt \"Calibri\";\n"
-"color: rgb(255, 255, 255);")
+"background-color: rgb(85, 170, 255);\n"
+"color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
         self.label.setAlignment(Qt.AlignCenter)
-        self.Accel = PlotWidget(self.centralwidget)
-        self.Accel.setObjectName(u"Accel")
-        self.Accel.setGeometry(QRect(210, 60, 461, 231))
-        self.Gyro = PlotWidget(self.centralwidget)
-        self.Gyro.setObjectName(u"Gyro")
-        self.Gyro.setGeometry(QRect(210, 310, 461, 231))
+        self.connect_button = QPushButton(self.centralwidget)
+        self.connect_button.setObjectName(u"connect_button")
+        self.connect_button.setGeometry(QRect(40, 80, 75, 24))
+        self.connect_button.setStyleSheet(u"QPushButton {\n"
+"	background-color: rgb(85, 170, 255);\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(67, 135, 202)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"	background-color: rgb(85, 170, 0)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"")
+        self.disconnect_button = QPushButton(self.centralwidget)
+        self.disconnect_button.setObjectName(u"disconnect_button")
+        self.disconnect_button.setGeometry(QRect(130, 80, 75, 24))
+        self.disconnect_button.setStyleSheet(u"QPushButton {\n"
+"	background-color: rgb(255, 85, 0);\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(67, 135, 202)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"	background-color: rgb(85, 170, 0)\n"
+"	border: none;\n"
+"	color: rgb(255, 255, 255);\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 943, 22))
+        self.menubar.setGeometry(QRect(0, 0, 893, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -57,5 +127,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Phenoix VI Ground Controll", None))
+        self.connect_button.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
+        self.disconnect_button.setText(QCoreApplication.translate("MainWindow", u"Disconnect", None))
     # retranslateUi
 

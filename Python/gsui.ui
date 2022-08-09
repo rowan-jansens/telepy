@@ -6,29 +6,60 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>943</width>
-    <height>622</height>
+    <width>893</width>
+    <height>638</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(62, 62, 62);</string>
+   <string notr="true">QMainWindow#MainWindow{
+background-color:rgb(85, 170, 255)
+}</string>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget#centralwidget{
+	background-color: rgb(58, 58, 58);
+}</string>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>230</y>
+      <width>581</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="PlotWidget" name="Accel" native="true"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="PlotWidget" name="Gyro" native="true"/>
+     </item>
+    </layout>
+   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>391</width>
-      <height>31</height>
+      <width>411</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">font: 26pt &quot;Calibri&quot;;
-color: rgb(255, 255, 255);</string>
+background-color: rgb(85, 170, 255);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(188, 214, 255);
+border-radius: 10px;</string>
     </property>
     <property name="text">
      <string>Phenoix VI Ground Controll</string>
@@ -37,24 +68,78 @@ color: rgb(255, 255, 255);</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="PlotWidget" name="Accel" native="true">
+   <widget class="QPushButton" name="connect_button">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>60</y>
-      <width>461</width>
-      <height>231</height>
+      <x>40</x>
+      <y>80</y>
+      <width>75</width>
+      <height>24</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background-color: rgb(85, 170, 255);
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}
+
+QPushButton:hover {
+	background-color: rgb(67, 135, 202)
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}
+
+QPushButton:pressed {
+	background-color: rgb(85, 170, 0)
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string>Connect</string>
+    </property>
    </widget>
-   <widget class="PlotWidget" name="Gyro" native="true">
+   <widget class="QPushButton" name="disconnect_button">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>310</y>
-      <width>461</width>
-      <height>231</height>
+      <x>130</x>
+      <y>80</y>
+      <width>75</width>
+      <height>24</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background-color: rgb(255, 85, 0);
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}
+
+QPushButton:hover {
+	background-color: rgb(67, 135, 202)
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}
+
+QPushButton:pressed {
+	background-color: rgb(85, 170, 0)
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string>Disconnect</string>
     </property>
    </widget>
   </widget>
@@ -63,7 +148,7 @@ color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>943</width>
+     <width>893</width>
      <height>22</height>
     </rect>
    </property>
