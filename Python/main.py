@@ -1,13 +1,13 @@
 import sys
 import random
+from tkinter.ttk import Separator
 from PySide6 import QtCore, QtWidgets, QtGui
 from gsui_py import Ui_MainWindow
 import numpy as np
 import serial
 import time
 import serial.tools.list_ports
-
-
+import math
 
 import pyqtgraph as pg
 
@@ -41,9 +41,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.save_button.clicked.connect(self.add_data_to_file)
 
         self.ui.Accel.addLegend()
-        self.ui.Accel.setTitle("Acceleraion", color=[85, 170, 255], size="12pt")
+        self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
         self.ui.Gyro.addLegend()
         self.ui.Gyro.setTitle("Angular Rate", color=[85, 170, 255], size="12pt")
+        self.ui.Position.addLegend()
+        self.ui.Position.setTitle("Position", color=[85, 170, 255], size="12pt")
+        self.ui.Altitude.addLegend()
+        self.ui.Altitude.setTitle("Altitude", color=[85, 170, 255], size="12pt")
+        self.ui.Velocity.addLegend()
+        self.ui.Velocity.setTitle("Velocity", color=[85, 170, 255], size="12pt")
+        self.ui.Orientation.addLegend()
+        self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
+
+
 
         for i in range(6):
             data_series = list(plot_LUT.keys())[i]
@@ -61,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def open_serial(self):
         global file_name
         time_struct = time.gmtime()
-        file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(time.time())[-5:-1] + ".txt"
+        file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(round(time.time()))[-5:-1] + ".txt"
         print(file_name)
         with open(file_name, 'w') as f:
             f.write("time,ax,ay,az,gx,gy,gz,\n")
@@ -81,12 +91,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def close_serial(self):
         self.ser.close()
         self.timer.timeout.disconnect()
+        self.add_data_to_file()
         
 
     def resize_plots(self):
-        self.ui.Accel.autoRange()
-        self.ui.Gyro.autoRange()
-
+        self.ui.Accel.enableAutoRange()
+        self.ui.Gyro.enableAutoRange()
 
 
     def init_data(self):
@@ -108,17 +118,39 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.data_rate = 1
             if self.num_lines_read > self.data_buffer:
                 self.add_data_to_file()
-        print(self.num_lines_read)
+        # print(self.num_lines_read)
+        self.update_window()
+    
+
+
+
+    def update_window(self):
+        if (self.num_lines_read%100) == 0:
+            phase_color = np.random.normal(120, 30, 3)
+            self.ui.phase_indicator.setText("Phase: " + str(random.randint(1,8)))
+            
+            self.ui.phase_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
+"background-color: rgb(" + np.array2string(phase_color, separator=', ').strip('[]')  + ");\n"
+"color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+
+        self.update_plot("x_accel", self.x / self.data_rate, self.data_array[:,1])
+        self.update_plot("y_accel", self.x / self.data_rate, self.data_array[:,2])
+        self.update_plot("z_accel", self.x / self.data_rate, self.data_array[:,3])
+        self.update_plot("x_gyr", self.x / self.data_rate, self.data_array[:,4])
+        self.update_plot("y_gyr", self.x / self.data_rate, self.data_array[:,5])
+        self.update_plot("z_gyr", self.x / self.data_rate, self.data_array[:,6])
+
+        on_time_seconds = (self.line[0] / 1000) % 60
+        on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
+        self.ui.on_time.setText(str(on_time_minutes) + ":" + str(on_time_seconds))
+
         
-        GC.update_plot("x_accel", self.x / self.data_rate, self.data_array[:,1])
-        GC.update_plot("y_accel", self.x / self.data_rate, self.data_array[:,2])
-        GC.update_plot("z_accel", self.x / self.data_rate, self.data_array[:,3])
-        GC.update_plot("x_gyr", self.x / self.data_rate, self.data_array[:,4])
-        GC.update_plot("y_gyr", self.x / self.data_rate, self.data_array[:,5])
-        GC.update_plot("z_gyr", self.x / self.data_rate, self.data_array[:,6])
 
 
     def add_data_to_file(self):
+
         with open(file_name, 'a') as f:
             f.writelines(np.array2string(self.data_array[-self.num_lines_read:, :], separator=',', edgeitems=300, max_line_width=300).replace('[','').replace(']',''))
             f.write('\n')
@@ -127,17 +159,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+
         
 
 if __name__ == "__main__":
 
-    
+
     app = QtWidgets.QApplication([])
-
     GC = MainWindow()
-
     GC.show()
-
     sys.exit(app.exec())
     ser.close()
     

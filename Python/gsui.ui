@@ -28,59 +28,70 @@ background-color:rgb(85, 170, 255)
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="1" column="0" colspan="3">
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="2">
-       <widget class="PlotWidget" name="Orientation" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="PlotWidget" name="Gyro" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="PlotWidget" name="Accel" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="PlotWidget" name="Altitude" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="PlotWidget" name="Velocity" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="PlotWidget" name="Position" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 26pt &quot;Calibri&quot;;
+background-color: rgb(85, 170, 255);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(188, 214, 255);
+border-radius: 10px;</string>
+      </property>
+      <property name="text">
+       <string> Phenoix VI Ground Controll </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </item>
     <item row="0" column="2">
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="1">
-       <widget class="QComboBox" name="serial_port"/>
+       <widget class="QComboBox" name="serial_port">
+        <property name="minimumSize">
+         <size>
+          <width>55</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QComboBox {
+	background-color: rgb(132, 132, 132);
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>COM4</string>
+         </property>
+        </item>
+       </widget>
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="serial_baud">
+        <property name="minimumSize">
+         <size>
+          <width>63</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QComboBox {
+	background-color: rgb(132, 132, 132);
+	border: none;
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+}</string>
+        </property>
         <item>
          <property name="text">
           <string>9600</string>
@@ -127,21 +138,21 @@ background-color:rgb(85, 170, 255)
        <widget class="QPushButton" name="resize_button">
         <property name="styleSheet">
          <string notr="true">QPushButton {
-	background-color: rgb(117, 117, 117);
+	background-color: rgb(132, 132, 132);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
 QPushButton:hover {
-	background-color: rgb(67, 135, 202)
+	background-color: rgb(100, 100, 100);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
 QPushButton:pressed {
-	background-color: rgb(85, 170, 0)
+	background-color: rgb(85, 170, 0);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
@@ -163,14 +174,14 @@ QPushButton:pressed {
 }
 
 QPushButton:hover {
-	background-color: rgb(67, 135, 202)
+	background-color: rgb(198, 66, 0);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
 QPushButton:pressed {
-	background-color: rgb(85, 170, 0)
+	background-color: rgb(191, 64, 0);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
@@ -186,22 +197,22 @@ QPushButton:pressed {
       <item row="0" column="0">
        <widget class="QPushButton" name="connect_button">
         <property name="styleSheet">
-         <string notr="true">QPushButton {
+         <string notr="true">QPushButton#connect_button {
 	background-color: rgb(85, 170, 255);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
-QPushButton:hover {
-	background-color: rgb(67, 135, 202)
+QPushButton#connect_button:hover {
+	background-color: rgb(67, 135, 202);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
-QPushButton:pressed {
-	background-color: rgb(85, 170, 0)
+QPushButton#connect_button:pressed {
+	background-color: rgb(85, 170, 0);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
@@ -218,21 +229,21 @@ QPushButton:pressed {
        <widget class="QPushButton" name="save_button">
         <property name="styleSheet">
          <string notr="true">QPushButton {
-	background-color: rgb(117, 117, 117);
+	background-color: rgb(132, 132, 132);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
 QPushButton:hover {
-	background-color: rgb(67, 135, 202)
+	background-color: rgb(100, 100, 100);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
 }
 
 QPushButton:pressed {
-	background-color: rgb(85, 170, 0)
+	background-color: rgb(85, 170, 0);
 	border: none;
 	color: rgb(255, 255, 255);
 	border-radius: 5px;
@@ -258,17 +269,88 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item row="2" column="0" colspan="3">
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="2">
+       <widget class="PlotWidget" name="Orientation" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PlotWidget" name="Gyro" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="PlotWidget" name="Accel" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="PlotWidget" name="Altitude" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="PlotWidget" name="Velocity" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="PlotWidget" name="Position" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="phase_indicator">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>32</height>
+       </size>
+      </property>
       <property name="styleSheet">
-       <string notr="true">font: 26pt &quot;Calibri&quot;;
-background-color: rgb(85, 170, 255);
+       <string notr="true">font: 20pt &quot;Calibri&quot;;
+background-color: rgb(85, 170, 0);
 color: rgb(255, 255, 255);
 selection-background-color: rgb(188, 214, 255);
 border-radius: 10px;</string>
       </property>
       <property name="text">
-       <string> Phenoix VI Ground Controll </string>
+       <string>Phase: 1</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="on_time">
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
