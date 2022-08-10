@@ -9,6 +9,7 @@ import time
 import serial.tools.list_ports
 import math
 
+
 import pyqtgraph as pg
 
 
@@ -18,7 +19,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setWindowIcon(QtGui.QIcon('telepy.png'))
 
+
+
+
+
+        self.setWindowTitle("TelePy - Ground Station")
         pg.setConfigOptions(antialias=True)
 
         plot_LUT = {"x_accel": ["Accel", "y"],
@@ -40,18 +47,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.resize_button.clicked.connect(self.resize_plots)
         self.ui.save_button.clicked.connect(self.add_data_to_file)
 
-        self.ui.Accel.addLegend()
-        self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
-        self.ui.Gyro.addLegend()
-        self.ui.Gyro.setTitle("Angular Rate", color=[85, 170, 255], size="12pt")
-        self.ui.Position.addLegend()
-        self.ui.Position.setTitle("Position", color=[85, 170, 255], size="12pt")
-        self.ui.Altitude.addLegend()
-        self.ui.Altitude.setTitle("Altitude", color=[85, 170, 255], size="12pt")
-        self.ui.Velocity.addLegend()
-        self.ui.Velocity.setTitle("Velocity", color=[85, 170, 255], size="12pt")
-        self.ui.Orientation.addLegend()
-        self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
+        # self.ui.Accel.addLegend()
+        # self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
+        # self.ui.Gyro.addLegend()
+        # self.ui.Gyro.setTitle("Angular Rate", color=[85, 170, 255], size="12pt")
+        # self.ui.Position.addLegend()
+        # self.ui.Position.setTitle("Position", color=[85, 170, 255], size="12pt")
+        # self.ui.Altitude.addLegend()
+        # self.ui.Altitude.setTitle("Altitude", color=[85, 170, 255], size="12pt")
+        # self.ui.Velocity.addLegend()
+        # self.ui.Velocity.setTitle("Velocity", color=[85, 170, 255], size="12pt")
+        # self.ui.Orientation.addLegend()
+        # self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
 
 
 
@@ -142,7 +149,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_plot("y_gyr", self.x / self.data_rate, self.data_array[:,5])
         self.update_plot("z_gyr", self.x / self.data_rate, self.data_array[:,6])
 
-        on_time_seconds = (self.line[0] / 1000) % 60
+        on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
         self.ui.on_time.setText(str(on_time_minutes) + ":" + str(on_time_seconds))
 
@@ -167,6 +174,8 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication([])
     GC = MainWindow()
+
+
     GC.show()
     sys.exit(app.exec())
     ser.close()

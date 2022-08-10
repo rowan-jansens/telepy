@@ -25,9 +25,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(893, 638)
+        MainWindow.resize(1075, 638)
         MainWindow.setStyleSheet(u"QMainWindow#MainWindow{\n"
-"background-color:rgb(85, 170, 255)\n"
+"background-color:rgb(53, 53, 53);\n"
 "}")
         MainWindow.setTabShape(QTabWidget.Rounded)
         self.centralwidget = QWidget(MainWindow)
@@ -37,22 +37,6 @@ class Ui_MainWindow(object):
 "}")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label = QLabel(self.centralwidget)
-        self.label.setObjectName(u"label")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-        self.label.setStyleSheet(u"font: 26pt \"Calibri\";\n"
-"background-color: rgb(85, 170, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"selection-background-color: rgb(188, 214, 255);\n"
-"border-radius: 10px;")
-        self.label.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
-
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.serial_port = QComboBox(self.centralwidget)
@@ -240,13 +224,20 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addLayout(self.gridLayout_3, 2, 0, 1, 3)
 
+        self.on_time = QLabel(self.centralwidget)
+        self.on_time.setObjectName(u"on_time")
+        self.on_time.setStyleSheet(u"color: rgb(255, 255, 255);")
+        self.on_time.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_2.addWidget(self.on_time, 1, 2, 1, 1)
+
         self.phase_indicator = QLabel(self.centralwidget)
         self.phase_indicator.setObjectName(u"phase_indicator")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.phase_indicator.sizePolicy().hasHeightForWidth())
-        self.phase_indicator.setSizePolicy(sizePolicy1)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.phase_indicator.sizePolicy().hasHeightForWidth())
+        self.phase_indicator.setSizePolicy(sizePolicy)
         self.phase_indicator.setMinimumSize(QSize(0, 32))
         self.phase_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
 "background-color: rgb(85, 170, 0);\n"
@@ -257,17 +248,21 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.phase_indicator, 1, 0, 1, 1)
 
-        self.on_time = QLabel(self.centralwidget)
-        self.on_time.setObjectName(u"on_time")
-        self.on_time.setStyleSheet(u"color: rgb(255, 255, 255);")
-        self.on_time.setAlignment(Qt.AlignCenter)
+        self.gridLayout_5 = QGridLayout()
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.label = QLabel(self.centralwidget)
+        self.label.setObjectName(u"label")
+        self.label.setPixmap(QPixmap(u"telepy_name.png"))
 
-        self.gridLayout_2.addWidget(self.on_time, 1, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.label, 0, 0, 1, 1)
+
+
+        self.gridLayout_2.addLayout(self.gridLayout_5, 0, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 893, 22))
+        self.menubar.setGeometry(QRect(0, 0, 1075, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -280,7 +275,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u" Phenoix VI Ground Controll ", None))
         self.serial_port.setItemText(0, QCoreApplication.translate("MainWindow", u"COM4", None))
 
         self.serial_baud.setItemText(0, QCoreApplication.translate("MainWindow", u"9600", None))
@@ -296,7 +290,8 @@ class Ui_MainWindow(object):
         self.disconnect_button.setText(QCoreApplication.translate("MainWindow", u" Disconnect ", None))
         self.connect_button.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
         self.save_button.setText(QCoreApplication.translate("MainWindow", u"Save", None))
-        self.phase_indicator.setText(QCoreApplication.translate("MainWindow", u"Phase: 1", None))
         self.on_time.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
+        self.phase_indicator.setText(QCoreApplication.translate("MainWindow", u"Phase: 1", None))
+        self.label.setText("")
     # retranslateUi
 

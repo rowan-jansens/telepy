@@ -10,17 +10,16 @@ import pyqtgraph as pg
 
 
 
-
+def stop_plots():
+    ser.close()
+    print("Stop")
 
 
 class MyWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
-        plot_LUT = {"x_accel": ["Acceleration", "y"],
-                 "y_accel": ["Acceleration", "r"],
-                 "z_accel": ["Acceleration", "m"],
-                 "x_gyr": ["Gyro", "y"],
+        plot_LUT = {"x_gyr": ["Gyro", "y"],
                  "y_gyr": ["Gyro", "r"],
                  "z_gyr": ["Gyro", "m"]}
 
@@ -34,9 +33,12 @@ class MyWidget(QtWidgets.QWidget):
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.text)
         self.layout.addWidget(self.frequency)
+        self.stop_button = QtWidgets.QPushButton()
+        self.layout.addWidget(self.stop_button)
+        self.stop_button.clicked.connect(stop_plots)
 
 
-        for i in range(6):
+        for i in range(3):
             current_widgets = list(vars(self).keys())
             data_series = list(plot_LUT.keys())[i]
             plot_widget = plot_LUT[data_series][0]
@@ -46,11 +48,11 @@ class MyWidget(QtWidgets.QWidget):
             if plot_widget not in current_widgets:
                 setattr(self, plot_widget, pg.PlotWidget(title=plot_widget))
                 self.layout.addWidget(getattr(self, plot_widget))
-                getattr(self, plot_widget).addLegend()
+                # getattr(self, plot_widget).addLegend()
 
 
             #add series to widget and set line style
-            setattr(self, data_series, getattr(self, plot_widget).plot(name=data_series, pen=series_color, width=4))
+            setattr(self, data_series, getattr(self, plot_widget).plot(name=data_series, pen= pg.mkPen(color=series_color, width=3)))
 
 
     def update_plot(self, plot_name, x, y):
@@ -77,7 +79,7 @@ if __name__ == "__main__":
 
 
     data_entries = 7
-    data_buffer  = 200
+    data_buffer  = 300
     data = np.zeros([data_buffer, data_entries], dtype = np.float64)
     x = np.arange(-1 * data_buffer, 0, 1)
 
@@ -92,9 +94,9 @@ if __name__ == "__main__":
             data = data[1:, :]
             data_rate = (int(1 / ((np.mean(np.diff(data[180:, 0]))) / 1000)))
 
-        widget.update_plot("x_accel", x / data_rate, data[:,1])
-        widget.update_plot("y_accel", x / data_rate, data[:,2])
-        widget.update_plot("z_accel", x / data_rate, data[:,3])
+        # widget.update_plot("x_accel", x / data_rate, data[:,1])
+        # widget.update_plot("y_accel", x / data_rate, data[:,2])
+        # widget.update_plot("z_accel", x / data_rate, data[:,3])
         widget.update_plot("x_gyr", x / data_rate, data[:,4])
         widget.update_plot("y_gyr", x / data_rate, data[:,5])
         widget.update_plot("z_gyr", x / data_rate, data[:,6])
@@ -104,6 +106,9 @@ if __name__ == "__main__":
     timer = QtCore.QTimer()
     timer.timeout.connect(update)
     timer.start(10)
+
+    
+
 
     
 
