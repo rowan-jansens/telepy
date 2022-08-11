@@ -32,13 +32,14 @@ MPU6500_WE myMPU6500 = MPU6500_WE(MPU6500_ADDR);
 void setup() {
   Serial.begin(115200);
   Wire.begin();
+  while (!Serial){};
   if(!myMPU6500.init()){
-//    Serial.println("MPU6500 does not respond");
+   //Serial.println("MPU6500 does not respond");
   }
   else{
-//    Serial.println("MPU6500 is connected");
+    //Serial.println("test");
   }
-  
+  Serial.write(64);
   /* The slope of the curve of acceleration vs measured values fits quite well to the theoretical 
    * values, e.g. 16384 units/g in the +/- 2g range. But the starting point, if you position the 
    * MPU6500 flat, is not necessarily 0g/0g/1g for x/y/z. The autoOffset function measures offset 
@@ -49,7 +50,7 @@ void setup() {
    * This function needs to be called at the beginning since it can overwrite your settings!
    */
 //  Serial.println("Position you MPU6500 flat and don't move it - calibrating...");
-  delay(100);
+  //delay(100);
   myMPU6500.autoOffsets();
 //  Serial.println("Done!");
 
@@ -117,7 +118,7 @@ void loop() {
 
   long t2 = micros();
   delay(50 - ((t2 - t1) / 1000));
-M
+
 
 //  Serial.print(gyr.x);
 //  Serial.print(gyr.y);

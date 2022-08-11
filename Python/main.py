@@ -41,6 +41,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.serial_port.addItem((str(p)[0:4]))
         self.ui.serial_baud.setCurrentIndex(7)
         self.num_lines_read = 0
+        self.status_que = []
         
 
         # connect buttons and sliders
@@ -64,6 +65,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
 
 
+        self.status_timer = QtCore.QTimer()
+        self.status_timer.timeout.connect(self.clear_status)
+        
+
+
 
         for i in range(6):
             data_series = list(plot_LUT.keys())[i]
@@ -79,18 +85,28 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def open_serial(self):
-        # print(self.ui.serial_baud.cu)
         self.init_data()
+        
         self.ser = serial.Serial(self.ui.serial_port.currentText(), int(self.ui.serial_baud.currentText()))  # change COM# if necessary
-        time.sleep(2)
-        self.ser.flushInput
-        # print(self.ser.readline())
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.fetch_serial_data)
-        self.timer.start(50)
+        time.sleep(1)
+        test_byte = ord(self.ser.read())
+        if test_byte == 64:
+            self.print_status("Connection sucessfull")
+            time.sleep(1)
+            self.ser.flushInput
+            self.timer = QtCore.QTimer()
+            self.timer.timeout.connect(self.fetch_serial_data)
+            self.timer.start(50)
+        else:
+            self.print_status("Connection failed")
+            self.ser.close()
+
+
+
     
     def close_serial(self):
         self.ser.close()
+        self.print_status("Serial Closed")
         self.timer.timeout.disconnect()
         self.add_data_to_file()
         
@@ -137,6 +153,20 @@ class MainWindow(QtWidgets.QMainWindow):
             
         # print(self.num_lines_read)
         self.update_window()
+
+    def print_status(self, text):
+        if text != "#return#":
+            self.status_que.append(text)
+        if not self.status_timer.isActive():
+            self.ui.print_debug.setText(self.status_que[0])
+            self.status_que.pop(0)
+            self.status_timer.start(2000)
+
+    def clear_status(self):
+        self.ui.print_debug.setText("     ")
+        self.status_timer.stop()
+        if len(self.status_que) > 0:
+            self.print_status("#return#")
     
 
 
@@ -181,6 +211,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(round(time.time()))[-5:-1] + ".txt"
                 with open(file_name, 'w') as f:
                     f.write("time,ax,ay,az,gx,gy,gz,\n")
+                self.print_status("File Created: " + file_name[10:])
 
             if self.num_lines_read < self.data_buffer:
                 self.data_in_file += self.num_lines_read
@@ -191,6 +222,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 f.write('\n')
             self.ui.data_points_in_file.setText("  " + str(self.data_in_file) + "  ")
             self.num_lines_read = 0
+            self.print_status("Data Saved")
         
 
 
