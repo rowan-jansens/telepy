@@ -1,3 +1,4 @@
+import re
 import sys
 import random
 from tkinter.ttk import Separator
@@ -40,12 +41,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.serial_port.addItem((str(p)[0:4]))
         self.ui.serial_baud.setCurrentIndex(7)
         self.num_lines_read = 0
-
         
+
+        # connect buttons and sliders
         self.ui.connect_button.clicked.connect(self.open_serial)
         self.ui.disconnect_button.clicked.connect(self.close_serial)
         self.ui.resize_button.clicked.connect(self.resize_plots)
         self.ui.save_button.clicked.connect(self.add_data_to_file)
+        # self.ui.plot_speed.valueChanged.connect(self.update_plot_speed)
 
         # self.ui.Accel.addLegend()
         # self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
@@ -77,6 +80,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def open_serial(self):
         global file_name
+        self.data_in_file = 0
         time_struct = time.gmtime()
         file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(round(time.time()))[-5:-1] + ".txt"
         print(file_name)
@@ -108,23 +112,39 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def init_data(self):
         self.data_entries = 7
-        self.data_buffer  = 200
+        self.data_buffer  = 300
         self.data_array = np.zeros([self.data_buffer, self.data_entries], dtype = np.float64)
         self.x = np.arange(-1 * self.data_buffer, 0, 1)
 
+        
+
+
+
+
     def fetch_serial_data(self):
+
+        # read lines
         while (self.ser.in_waiting > 0):
             self.line = self.ser.readline()
             self.num_lines_read += 1
+
+            # decode line and append to buffer
             self.line = np.asarray(self.line.decode().rstrip('\n').split(","), dtype=np.single)
-            # print(line)
             self.data_array = np.append(self.data_array, [self.line], axis=0)
+
+            #update data array using current buffer size set by slider
             self.data_array = self.data_array[1:, :]
             self.data_rate = (int(1 / ((np.mean(np.diff(self.data_array[180:, 0]))) / 1000)))
+
+            # check for zero data rate
             if self.data_rate == 0:
                 self.data_rate = 1
+
+            # check for save state condition
             if self.num_lines_read > self.data_buffer:
                 self.add_data_to_file()
+
+            
         # print(self.num_lines_read)
         self.update_window()
     
@@ -132,6 +152,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def update_window(self):
+        speed_scale = self.ui.plot_speed.value()
+
         if (self.num_lines_read%100) == 0:
             phase_color = np.random.normal(120, 30, 3)
             self.ui.phase_indicator.setText("Phase: " + str(random.randint(1,8)))
@@ -142,26 +164,28 @@ class MainWindow(QtWidgets.QMainWindow):
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
 
-        self.update_plot("x_accel", self.x / self.data_rate, self.data_array[:,1])
-        self.update_plot("y_accel", self.x / self.data_rate, self.data_array[:,2])
-        self.update_plot("z_accel", self.x / self.data_rate, self.data_array[:,3])
-        self.update_plot("x_gyr", self.x / self.data_rate, self.data_array[:,4])
-        self.update_plot("y_gyr", self.x / self.data_rate, self.data_array[:,5])
-        self.update_plot("z_gyr", self.x / self.data_rate, self.data_array[:,6])
+        self.update_plot("x_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,1])
+        self.update_plot("y_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,2])
+        self.update_plot("z_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,3])
+        self.update_plot("x_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,4])
+        self.update_plot("y_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,5])
+        self.update_plot("z_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,6])
 
         on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
-        self.ui.on_time.setText(str(on_time_minutes) + ":" + str(on_time_seconds))
+        self.ui.on_time.setText("  " + str(on_time_minutes) + ":" + format(on_time_seconds, '.2f') + "  ")
 
         
 
 
     def add_data_to_file(self):
-
+        self.data_in_file += self.num_lines_read
         with open(file_name, 'a') as f:
             f.writelines(np.array2string(self.data_array[-self.num_lines_read:, :], separator=',', edgeitems=300, max_line_width=300).replace('[','').replace(']',''))
             f.write('\n')
+        self.ui.data_points_in_file.setText("  " + str(self.data_in_file) + "  ")
         self.num_lines_read = 0
+        
 
 
 
