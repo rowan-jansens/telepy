@@ -47,21 +47,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.connect_button.clicked.connect(self.open_serial)
         self.ui.disconnect_button.clicked.connect(self.close_serial)
         self.ui.resize_button.clicked.connect(self.resize_plots)
-        self.ui.save_button.clicked.connect(self.add_data_to_file)
-        # self.ui.plot_speed.valueChanged.connect(self.update_plot_speed)
+        self.ui.save_button.clicked.connect(self.save_now)
 
-        # self.ui.Accel.addLegend()
-        # self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
-        # self.ui.Gyro.addLegend()
-        # self.ui.Gyro.setTitle("Angular Rate", color=[85, 170, 255], size="12pt")
-        # self.ui.Position.addLegend()
-        # self.ui.Position.setTitle("Position", color=[85, 170, 255], size="12pt")
-        # self.ui.Altitude.addLegend()
-        # self.ui.Altitude.setTitle("Altitude", color=[85, 170, 255], size="12pt")
-        # self.ui.Velocity.addLegend()
-        # self.ui.Velocity.setTitle("Velocity", color=[85, 170, 255], size="12pt")
-        # self.ui.Orientation.addLegend()
-        # self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
+
+        self.ui.Accel.addLegend()
+        self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
+        self.ui.Gyro.addLegend()
+        self.ui.Gyro.setTitle("Angular Rate", color=[85, 170, 255], size="12pt")
+        self.ui.Position.addLegend()
+        self.ui.Position.setTitle("Position", color=[85, 170, 255], size="12pt")
+        self.ui.Altitude.addLegend()
+        self.ui.Altitude.setTitle("Altitude", color=[85, 170, 255], size="12pt")
+        self.ui.Velocity.addLegend()
+        self.ui.Velocity.setTitle("Velocity", color=[85, 170, 255], size="12pt")
+        self.ui.Orientation.addLegend()
+        self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
 
 
 
@@ -79,16 +79,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def open_serial(self):
-        global file_name
-        self.data_in_file = 0
-        time_struct = time.gmtime()
-        file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(round(time.time()))[-5:-1] + ".txt"
-        print(file_name)
-        with open(file_name, 'w') as f:
-            f.write("time,ax,ay,az,gx,gy,gz,\n")
-
-
-        
         # print(self.ui.serial_baud.cu)
         self.init_data()
         self.ser = serial.Serial(self.ui.serial_port.currentText(), int(self.ui.serial_baud.currentText()))  # change COM# if necessary
@@ -175,16 +165,32 @@ class MainWindow(QtWidgets.QMainWindow):
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
         self.ui.on_time.setText("  " + str(on_time_minutes) + ":" + format(on_time_seconds, '.2f') + "  ")
 
-        
+    def save_now(self):
+        self.ui.save_data_option.setChecked(True)
+        if hasattr(self, "data_array"):
+            self.add_data_to_file()
 
 
     def add_data_to_file(self):
-        self.data_in_file += self.num_lines_read
-        with open(file_name, 'a') as f:
-            f.writelines(np.array2string(self.data_array[-self.num_lines_read:, :], separator=',', edgeitems=300, max_line_width=300).replace('[','').replace(']',''))
-            f.write('\n')
-        self.ui.data_points_in_file.setText("  " + str(self.data_in_file) + "  ")
-        self.num_lines_read = 0
+
+        if self.ui.save_data_option.isChecked():
+            if "file_name" not in globals():
+                global file_name
+                self.data_in_file = 0
+                time_struct = time.gmtime()
+                file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(round(time.time()))[-5:-1] + ".txt"
+                with open(file_name, 'w') as f:
+                    f.write("time,ax,ay,az,gx,gy,gz,\n")
+
+            if self.num_lines_read < self.data_buffer:
+                self.data_in_file += self.num_lines_read
+            else:
+                self.data_in_file += self.data_buffer
+            with open(file_name, 'a') as f:
+                f.writelines(np.array2string(self.data_array[-self.num_lines_read:, :], separator=',', edgeitems=300, max_line_width=300).replace('[','').replace(']','').replace(' ',''))
+                f.write('\n')
+            self.ui.data_points_in_file.setText("  " + str(self.data_in_file) + "  ")
+            self.num_lines_read = 0
         
 
 
