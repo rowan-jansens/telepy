@@ -339,35 +339,35 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
-        self.label_7 = QLabel(self.centralwidget)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setStyleSheet(u"color: rgb(255, 255, 255);")
+        self.stats_1_labels = QLabel(self.centralwidget)
+        self.stats_1_labels.setObjectName(u"stats_1_labels")
+        self.stats_1_labels.setStyleSheet(u"color: rgb(255, 255, 255);")
 
-        self.horizontalLayout_3.addWidget(self.label_7)
+        self.horizontalLayout_3.addWidget(self.stats_1_labels)
 
-        self.label_6 = QLabel(self.centralwidget)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setStyleSheet(u"color: rgb(255, 255, 255);")
+        self.stats_1 = QLabel(self.centralwidget)
+        self.stats_1.setObjectName(u"stats_1")
+        self.stats_1.setStyleSheet(u"color: rgb(255, 255, 255);")
 
-        self.horizontalLayout_3.addWidget(self.label_6)
+        self.horizontalLayout_3.addWidget(self.stats_1)
 
         self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_4)
 
-        self.label_2 = QLabel(self.centralwidget)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setStyleSheet(u"color: rgb(255, 255, 255);")
-        self.label_2.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.stats_2_labels = QLabel(self.centralwidget)
+        self.stats_2_labels.setObjectName(u"stats_2_labels")
+        self.stats_2_labels.setStyleSheet(u"color: rgb(255, 255, 255);")
+        self.stats_2_labels.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
-        self.horizontalLayout_3.addWidget(self.label_2)
+        self.horizontalLayout_3.addWidget(self.stats_2_labels)
 
-        self.label_3 = QLabel(self.centralwidget)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setStyleSheet(u"color: rgb(255, 255, 255);")
-        self.label_3.setMargin(13)
+        self.stats_2 = QLabel(self.centralwidget)
+        self.stats_2.setObjectName(u"stats_2")
+        self.stats_2.setStyleSheet(u"color: rgb(255, 255, 255);")
+        self.stats_2.setMargin(13)
 
-        self.horizontalLayout_3.addWidget(self.label_3)
+        self.horizontalLayout_3.addWidget(self.stats_2)
 
         self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -465,19 +465,19 @@ class Ui_MainWindow(object):
         self.serial_baud.setItemText(7, QCoreApplication.translate("MainWindow", u"115200", None))
 
         self.save_data_option.setText(QCoreApplication.translate("MainWindow", u"Auto Data Logging", None))
-        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Data Rate: \n"
+        self.stats_1_labels.setText(QCoreApplication.translate("MainWindow", u"Data Rate: \n"
 "Packet Age:\n"
 "Voltage:\n"
 "RSSI:", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"20 \n"
+        self.stats_1.setText(QCoreApplication.translate("MainWindow", u"20 \n"
 "000ms\n"
 "3.2V\n"
 "89%", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Pyros: \n"
+        self.stats_2_labels.setText(QCoreApplication.translate("MainWindow", u"Pyros: \n"
 "GPS Lat: \n"
 "GPS Lon: \n"
 "GPS Alt:", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"[1, 1] \n"
+        self.stats_2.setText(QCoreApplication.translate("MainWindow", u"[1, 1] \n"
 "12.234.124N \n"
 "-12,34,5W \n"
 "345m", None))

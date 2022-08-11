@@ -92,7 +92,7 @@ class MainWindow(QtWidgets.QMainWindow):
         test_byte = ord(self.ser.read())
         if test_byte == 64:
             self.print_status("Connection sucessfull")
-            time.sleep(1)
+            time.sleep(2)
             self.ser.flushInput
             self.timer = QtCore.QTimer()
             self.timer.timeout.connect(self.fetch_serial_data)
@@ -194,6 +194,9 @@ class MainWindow(QtWidgets.QMainWindow):
         on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
         self.ui.on_time.setText("  " + str(on_time_minutes) + ":" + format(on_time_seconds, '.2f') + "  ")
+
+        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n3.8v\n89%")
+
 
     def save_now(self):
         self.ui.save_data_option.setChecked(True)

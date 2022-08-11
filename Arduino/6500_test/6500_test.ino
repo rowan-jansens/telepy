@@ -117,7 +117,7 @@ void loop() {
   Serial.write(10);
 
   long t2 = micros();
-  delay(50 - ((t2 - t1) / 1000));
+  delay(40 - ((t2 - t1) / 1000));
 
 
 //  Serial.print(gyr.x);
