@@ -1,3 +1,6 @@
+# edit UI $.\Scripts\pyside6-designer.exe .\gsui.ui
+# convert UI to PY = $.\Scripts\pyside6-uic.exe gsui.ui -o gsui_py.py
+
 import re
 import sys
 import random
@@ -85,21 +88,23 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def open_serial(self):
-        self.init_data()
-        
-        self.ser = serial.Serial(self.ui.serial_port.currentText(), int(self.ui.serial_baud.currentText()))  # change COM# if necessary
-        time.sleep(1)
-        test_byte = ord(self.ser.read())
-        if test_byte == 64:
-            self.print_status("Connection sucessfull")
-            time.sleep(2)
-            self.ser.flushInput
-            self.timer = QtCore.QTimer()
-            self.timer.timeout.connect(self.fetch_serial_data)
-            self.timer.start(50)
-        else:
-            self.print_status("Connection failed")
-            self.ser.close()
+        try:
+            self.init_data()
+            self.ser = serial.Serial(self.ui.serial_port.currentText(), int(self.ui.serial_baud.currentText()))  # change COM# if necessary
+            time.sleep(1)
+            test_byte = ord(self.ser.read(1))
+            if test_byte == 64:
+                self.print_status("Connection sucessfull")
+                time.sleep(2)
+                self.ser.flushInput
+                self.timer = QtCore.QTimer()
+                self.timer.timeout.connect(self.fetch_serial_data)
+                self.timer.start(50)
+            else:
+                self.print_status("Connection failed!")
+                self.ser.close()
+        except:
+            self.print_status("Connection failed!")
 
 
 
