@@ -58,7 +58,7 @@ void setup() {
 
   myMPU6500.setSampleRateDivider(1);
   myMPU6500.setAccRange(MPU6500_ACC_RANGE_8G);
-  myMPU6500.setGyrRange(MPU6500_GYRO_RANGE_250);
+  myMPU6500.setGyrRange(MPU6500_GYRO_RANGE_1000);
   myMPU6500.enableAccDLPF(false);
   myMPU6500.disableGyrDLPF(MPU6500_BW_WO_DLPF_8800);
 
