@@ -81,9 +81,10 @@ class MainWindow(QtWidgets.QMainWindow):
         for i in range(10):
             data_series = list(plot_LUT.keys())[i]
             plot_widget = plot_LUT[data_series][0]
-            series_color = plot_LUT[data_series][1]
+            series_color = pg.mkPen(color=plot_LUT[data_series][1], width=5)
+
             
-            setattr(self.ui, data_series, getattr(self.ui, plot_widget).plot(name=data_series, pen=series_color, width=4))
+            setattr(self.ui, data_series, getattr(self.ui, plot_widget).plot(name=data_series, pen=series_color))
         
 
 
