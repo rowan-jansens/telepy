@@ -101,6 +101,8 @@ void loop() {
   long t1 = micros();
   xyzFloat G = myMPU6500.getGValues();
   xyzFloat gyr = myMPU6500.getGyrValues();
+  xyzFloat angle = myMPU6500.getAngles();
+   float temp = myMPU6500.getTemperature();
   Serial.print(millis());
    Serial.print(",");
   Serial.print(G.x, 6);
@@ -114,6 +116,14 @@ void loop() {
   Serial.print(gyr.y, 6);
   Serial.print(",");
   Serial.print(gyr.z, 6);
+  Serial.print(",");
+  Serial.print(angle.x, 6);
+  Serial.print(",");
+  Serial.print(angle.y, 6);
+  Serial.print(",");
+  Serial.print(angle.z, 6);
+    Serial.print(",");
+  Serial.print(temp, 6);
   Serial.write(10);
 
   long t2 = micros();

@@ -37,7 +37,11 @@ class MainWindow(QtWidgets.QMainWindow):
                  "z_accel": ["Accel", "m"],
                  "x_gyr": ["Gyro", "y"],
                  "y_gyr": ["Gyro", "r"],
-                 "z_gyr": ["Gyro", "m"]}
+                 "z_gyr": ["Gyro", "m"],
+                 "x_ang": ["Position", "y"],
+                 "y_ang": ["Altitude", "r"],
+                 "z_ang": ["Velocity", "m"],
+                 "temp": ["Orientation", "y"]}
 
         ports = list(serial.tools.list_ports.comports())
         for p in ports:
@@ -74,7 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-        for i in range(6):
+        for i in range(10):
             data_series = list(plot_LUT.keys())[i]
             plot_widget = plot_LUT[data_series][0]
             series_color = plot_LUT[data_series][1]
@@ -122,7 +126,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def init_data(self):
-        self.data_entries = 7
+        self.data_entries = 11
         self.data_buffer  = 300
         self.data_array = np.zeros([self.data_buffer, self.data_entries], dtype = np.float64)
         self.x = np.arange(-1 * self.data_buffer, 0, 1)
@@ -195,6 +199,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_plot("x_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,4])
         self.update_plot("y_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,5])
         self.update_plot("z_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,6])
+        self.update_plot("x_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,7])
+        self.update_plot("y_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,8])
+        self.update_plot("z_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,9])
+        self.update_plot("temp", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,10])
 
         on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
