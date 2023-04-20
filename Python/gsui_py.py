@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'gsui.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -102,41 +102,41 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.Orientation = PlotWidget(self.centralwidget)
-        self.Orientation.setObjectName(u"Orientation")
-        self.Orientation.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.Plot3 = PlotWidget(self.centralwidget)
+        self.Plot3.setObjectName(u"Plot3")
+        self.Plot3.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
-        self.gridLayout_3.addWidget(self.Orientation, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.Plot3, 0, 2, 1, 1)
 
-        self.Gyro = PlotWidget(self.centralwidget)
-        self.Gyro.setObjectName(u"Gyro")
-        self.Gyro.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.Plot2 = PlotWidget(self.centralwidget)
+        self.Plot2.setObjectName(u"Plot2")
+        self.Plot2.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
-        self.gridLayout_3.addWidget(self.Gyro, 0, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.Plot2, 0, 1, 1, 1)
 
-        self.Accel = PlotWidget(self.centralwidget)
-        self.Accel.setObjectName(u"Accel")
-        self.Accel.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.Plot1 = PlotWidget(self.centralwidget)
+        self.Plot1.setObjectName(u"Plot1")
+        self.Plot1.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
-        self.gridLayout_3.addWidget(self.Accel, 0, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.Plot1, 0, 0, 1, 1)
 
-        self.Altitude = PlotWidget(self.centralwidget)
-        self.Altitude.setObjectName(u"Altitude")
-        self.Altitude.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.Plot5 = PlotWidget(self.centralwidget)
+        self.Plot5.setObjectName(u"Plot5")
+        self.Plot5.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
-        self.gridLayout_3.addWidget(self.Altitude, 1, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.Plot5, 1, 1, 1, 1)
 
-        self.Velocity = PlotWidget(self.centralwidget)
-        self.Velocity.setObjectName(u"Velocity")
-        self.Velocity.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.Plot6 = PlotWidget(self.centralwidget)
+        self.Plot6.setObjectName(u"Plot6")
+        self.Plot6.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
-        self.gridLayout_3.addWidget(self.Velocity, 1, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.Plot6, 1, 2, 1, 1)
 
-        self.Position = PlotWidget(self.centralwidget)
-        self.Position.setObjectName(u"Position")
-        self.Position.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.Plot4 = PlotWidget(self.centralwidget)
+        self.Plot4.setObjectName(u"Plot4")
+        self.Plot4.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
-        self.gridLayout_3.addWidget(self.Position, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.Plot4, 1, 0, 1, 1)
 
 
         self.gridLayout_2.addLayout(self.gridLayout_3, 1, 0, 1, 5)

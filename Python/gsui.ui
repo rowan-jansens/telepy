@@ -142,42 +142,42 @@ background-color: rgb(40, 40, 40);
     <item row="1" column="0" colspan="5">
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="2">
-       <widget class="PlotWidget" name="Orientation" native="true">
+       <widget class="PlotWidget" name="Plot3" native="true">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="PlotWidget" name="Gyro" native="true">
+       <widget class="PlotWidget" name="Plot2" native="true">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="PlotWidget" name="Accel" native="true">
+       <widget class="PlotWidget" name="Plot1" native="true">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="PlotWidget" name="Altitude" native="true">
+       <widget class="PlotWidget" name="Plot5" native="true">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="PlotWidget" name="Velocity" native="true">
+       <widget class="PlotWidget" name="Plot6" native="true">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="PlotWidget" name="Position" native="true">
+       <widget class="PlotWidget" name="Plot4" native="true">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>

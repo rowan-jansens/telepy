@@ -1,6 +1,9 @@
 # edit UI $.\Scripts\pyside6-designer.exe .\gsui.ui
 # convert UI to PY = $.\Scripts\pyside6-uic.exe gsui.ui -o gsui_py.py
 
+# start virtual evironment Scripts\Activate
+# .\.venv\Scripts\pyside6-designer.exe .\Python\gsui.ui 
+
 import re
 import sys
 import random
@@ -32,20 +35,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("TelePy - Ground Station")
         pg.setConfigOptions(antialias=True)
 
-        plot_LUT = {"x_accel": ["Accel", "y"],
-                 "y_accel": ["Accel", "r"],
-                 "z_accel": ["Accel", "m"],
-                 "x_gyr": ["Gyro", "y"],
-                 "y_gyr": ["Gyro", "r"],
-                 "z_gyr": ["Gyro", "m"],
-                 "x_ang": ["Position", "y"],
-                 "y_ang": ["Altitude", "r"],
-                 "z_ang": ["Velocity", "m"],
-                 "temp": ["Orientation", "y"]}
+        plot_LUT = {"bar_alt": ["Plot1", "m"],
+                    "kf_alt": ["Plot1", "g"],
+                    "EMA_alt": ["Plot1", "b"],
+
+                    "kf_vel": ["Plot2", "b"],
+                    "Int_vel": ["Plot2", "r"],
+                    "Dir_vel": ["Plot2", "g"],
+                    
+                 "x_accel": ["Plot4", "y"],
+                 "y_accel": ["Plot4", "r"],
+                 "z_accel": ["Plot4", "m"],
+
+                 "x_gyr": ["Plot5", "y"],
+                 "y_gyr": ["Plot5", "r"],
+                 "z_gyr": ["Plot5", "m"],
+
+                 "x_ang": ["Plot6", "y"],
+                 "y_ang": ["Plot6", "r"],
+                 "z_ang": ["Plot6", "m"],
+                 
+                 "temp": ["Plot3", "y"]}
 
         ports = list(serial.tools.list_ports.comports())
         for p in ports:
-            self.ui.serial_port.addItem((str(p)[0:4]))
+            self.ui.serial_port.addItem((str(p)[0:5]))
         self.ui.serial_baud.setCurrentIndex(7)
         self.num_lines_read = 0
         self.status_que = []
@@ -58,18 +72,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.save_button.clicked.connect(self.save_now)
 
 
-        self.ui.Accel.addLegend()
-        self.ui.Accel.setTitle("Acceleration", color=[85, 170, 255], size="12pt")
-        self.ui.Gyro.addLegend()
-        self.ui.Gyro.setTitle("Angular Rate", color=[85, 170, 255], size="12pt")
-        self.ui.Position.addLegend()
-        self.ui.Position.setTitle("Position", color=[85, 170, 255], size="12pt")
-        self.ui.Altitude.addLegend()
-        self.ui.Altitude.setTitle("Altitude", color=[85, 170, 255], size="12pt")
-        self.ui.Velocity.addLegend()
-        self.ui.Velocity.setTitle("Velocity", color=[85, 170, 255], size="12pt")
-        self.ui.Orientation.addLegend()
-        self.ui.Orientation.setTitle("Orientation", color=[85, 170, 255], size="12pt")
+        self.ui.Plot1.addLegend()
+        self.ui.Plot1.setTitle("Altitude", color=[85, 170, 255], size="12pt")
+        self.ui.Plot2.addLegend()
+        self.ui.Plot2.setTitle("Velocity", color=[85, 170, 255], size="12pt")
+        self.ui.Plot3.addLegend()
+        self.ui.Plot3.setTitle("Temperature", color=[85, 170, 255], size="12pt")
+        self.ui.Plot4.addLegend()
+        self.ui.Plot4.setTitle("Linear Accel", color=[85, 170, 255], size="12pt")
+        self.ui.Plot5.addLegend()
+        self.ui.Plot5.setTitle("Angular Accel", color=[85, 170, 255], size="12pt")
+        self.ui.Plot6.addLegend()
+        self.ui.Plot6.setTitle("Orientation", color=[85, 170, 255], size="12pt")
 
 
         self.status_timer = QtCore.QTimer()
@@ -78,12 +92,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-        for i in range(10):
+        for i in range(len(plot_LUT)):
             data_series = list(plot_LUT.keys())[i]
             plot_widget = plot_LUT[data_series][0]
             series_color = pg.mkPen(color=plot_LUT[data_series][1], width=5)
 
-            
             setattr(self.ui, data_series, getattr(self.ui, plot_widget).plot(name=data_series, pen=series_color))
         
 
@@ -122,12 +135,16 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def resize_plots(self):
-        self.ui.Accel.enableAutoRange()
-        self.ui.Gyro.enableAutoRange()
+        self.ui.Plot1.enableAutoRange()
+        self.ui.Plot2.enableAutoRange()
+        self.ui.Plot3.enableAutoRange()
+        self.ui.Plot4.enableAutoRange()
+        self.ui.Plot5.enableAutoRange()
+        self.ui.Plot6.enableAutoRange()
 
 
     def init_data(self):
-        self.data_entries = 11
+        self.data_entries = 28
         self.data_buffer  = 300
         self.data_array = np.zeros([self.data_buffer, self.data_entries], dtype = np.float64)
         self.x = np.arange(-1 * self.data_buffer, 0, 1)
@@ -184,12 +201,18 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_window(self):
         speed_scale = self.ui.plot_speed.value()
 
-        if (self.num_lines_read%100) == 0:
+        if (self.num_lines_read%1) == 0:
             phase_color = np.random.normal(120, 30, 3)
-            self.ui.phase_indicator.setText("Phase: " + str(random.randint(1,8)))
+
+            phase_labels = ["IDLE", "ARMED", "ASCENT", "APOGEE", "DECENT"]
+            phase_colors = ["85, 156, 242", "232, 21, 21", "224, 104, 29", "214, 61, 217", "61, 217, 82"]
+
+
+
+            self.ui.phase_indicator.setText(phase_labels[int(self.line[15])-1])
             
             self.ui.phase_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
-"background-color: rgb(" + np.array2string(phase_color, separator=', ').strip('[]')  + ");\n"
+"background-color: rgb(" + phase_colors[int(self.line[15])-1]  + ");\n"
 "color: rgb(255, 255, 255);\n"
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
@@ -200,16 +223,33 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_plot("x_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,4])
         self.update_plot("y_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,5])
         self.update_plot("z_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,6])
-        self.update_plot("x_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,7])
-        self.update_plot("y_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,8])
-        self.update_plot("z_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,9])
-        self.update_plot("temp", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,10])
+        self.update_plot("x_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,8])
+        self.update_plot("y_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,9])
+        self.update_plot("z_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,10])
+        self.update_plot("temp", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,7])
+        self.update_plot("bar_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,11])
+        # self.update_plot("EMA_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,20])
+        # self.update_plot("Int_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,23])
+        # self.update_plot("Dir_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,22])
+        self.update_plot("kf_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,21])
+        self.update_plot("kf_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,24])
 
         on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
+       
+        
+        #plot other textual telemetry elements
         self.ui.on_time.setText("  " + str(on_time_minutes) + ":" + format(on_time_seconds, '.2f') + "  ")
+        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n" + str(self.line[17]) + "v\n" + str(self.line[27]) + "%")
 
-        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n3.8v\n89%")
+        pyro_code = str(int(self.line[16]))
+    
+        pyro_one_state = pyro_code[2]
+        pyro_two_state = pyro_code[1]
+        arm_state = pyro_code[3]
+
+        self.ui.stats_2.setText("[" + pyro_one_state + ", " + pyro_two_state + "]\n"+ str(round(self.line[13], 7)) + "\n" + str(round(self.line[12], 7)) + "\n" + str(round(self.line[14], 3)))
+    
 
 
     def save_now(self):
