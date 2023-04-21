@@ -37,11 +37,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
         plot_LUT = {"bar_alt": ["Plot1", "m"],
                     "kf_alt": ["Plot1", "g"],
-                    "EMA_alt": ["Plot1", "b"],
+                    "trigger_alt": ["Plot1", "b"],
 
                     "kf_vel": ["Plot2", "b"],
                     "Int_vel": ["Plot2", "r"],
-                    "Dir_vel": ["Plot2", "g"],
+                    "trigger_vel": ["Plot2", "g"],
                     
                  "x_accel": ["Plot4", "y"],
                  "y_accel": ["Plot4", "r"],
@@ -227,8 +227,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_plot("y_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,9])
         self.update_plot("z_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,10])
         self.update_plot("temp", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,7])
+
+        self.update_plot("trigger_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,20])
+        self.update_plot("trigger_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,19])
+
+
         self.update_plot("bar_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,11])
-        # self.update_plot("EMA_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,20])
         # self.update_plot("Int_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,23])
         # self.update_plot("Dir_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,22])
         self.update_plot("kf_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,21])
@@ -240,7 +244,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #plot other textual telemetry elements
         self.ui.on_time.setText("  " + str(on_time_minutes) + ":" + format(on_time_seconds, '.2f') + "  ")
-        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n" + str(self.line[17]) + "v\n" + str(self.line[27]) + "%")
+        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n" + str(round(self.line[17], 2)) + "v\n" + str(self.line[27]) + "%")
 
         pyro_code = str(int(self.line[16]))
     
