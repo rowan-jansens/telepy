@@ -9,7 +9,7 @@ import sys
 import random
 from tkinter.ttk import Separator
 from PySide6 import QtCore, QtWidgets, QtGui
-from gsui_py import Ui_MainWindow
+from gsui_py_copy import Ui_MainWindow
 import numpy as np
 import serial
 import time
@@ -29,8 +29,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('telepy.png'))
 
-
-
+        self.previous_scroll=50
+        self.data_array=None
+        self.read=False
 
 
         self.setWindowTitle("TelePy - Ground Station")
@@ -72,6 +73,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.disconnect_button.clicked.connect(self.close_serial)
         self.ui.resize_button.clicked.connect(self.resize_plots)
         self.ui.save_button.clicked.connect(self.save_now)
+        self.ui.read_button.clicked.connect(self.read_data)
 
 
         self.ui.Plot1.addLegend()
@@ -202,6 +204,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def update_window(self):
         speed_scale = self.ui.plot_speed.value()
+        delta_scroll=int(self.ui.scroll.value())-self.previous_scroll
+        self.previous_scroll=int(self.ui.scroll.value())
+        self.ui.left_bound.setValue(self.ui.left_bound.value()+delta_scroll)
+        self.ui.right_bound.setValue(self.ui.right_bound.value()+delta_scroll)
+        left_side=int(self.ui.left_bound.value()/1000*(len(self.x)-1))
+        right_side=int(self.ui.right_bound.value()/1000*(len(self.x)-1))
+        if self.read:
+            self.line=self.data_array[left_side]
+            speed_scale=len(self.x)
 
         if (self.num_lines_read%1) == 0:
             phase_color = np.random.normal(120, 30, 3)
@@ -219,26 +230,26 @@ class MainWindow(QtWidgets.QMainWindow):
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
 
-        self.update_plot("x_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,1])
-        self.update_plot("y_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,2])
-        self.update_plot("z_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,3])
-        self.update_plot("x_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,4])
-        self.update_plot("y_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,5])
-        self.update_plot("z_gyr", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,6])
-        self.update_plot("x_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,8])
-        self.update_plot("y_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,9])
-        self.update_plot("z_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,10])
-        self.update_plot("temp", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,7])
+        self.update_plot("x_accel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,1])
+        self.update_plot("y_accel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,2])
+        self.update_plot("z_accel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,3])
+        self.update_plot("x_gyr", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,4])
+        self.update_plot("y_gyr", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,5])
+        self.update_plot("z_gyr", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,6])
+        self.update_plot("x_ang", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,8])
+        self.update_plot("y_ang", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,9])
+        self.update_plot("z_ang", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,10])
+        self.update_plot("temp", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,7])
 
-        self.update_plot("trigger_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,20])
-        self.update_plot("trigger_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,19])
+        self.update_plot("trigger_alt", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,20])
+        self.update_plot("trigger_vel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,19])
 
 
-        self.update_plot("bar_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,11])
-        # self.update_plot("Int_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,23])
-        # self.update_plot("Dir_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,22])
-        self.update_plot("kf_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,21])
-        self.update_plot("kf_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,24])
+        self.update_plot("bar_alt", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,11])
+        # self.update_plot("Int_vel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,23])
+        # self.update_plot("Dir_vel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,22])
+        self.update_plot("kf_alt", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,21])
+        self.update_plot("kf_vel", self.x[left_side-speed_scale:right_side] / self.data_rate, self.data_array[left_side-speed_scale:right_side,24])
 
         on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
@@ -263,6 +274,32 @@ class MainWindow(QtWidgets.QMainWindow):
         if hasattr(self, "data_array"):
             self.add_data_to_file()
 
+    def read_data(self):
+        fileName = QtWidgets.QFileDialog.getOpenFileName(self,
+            "Open Image", ".", "")[0]
+        with open(fileName, "r") as log_file:
+            lines=log_file.readlines()
+            for line1,line2 in zip(lines[::2], lines[1::2]):
+                line1=line1.strip()
+                line2=line2.strip()
+                if line1.endswith(","):
+                    line1=line1[:-1]
+                if line2.endswith(","):
+                    line2=line2[:-1]
+                array1=np.fromstring(line1, sep=",")
+                array2=np.fromstring(line2, sep=",")
+                array=np.concatenate((array1,array2), axis=None)
+                if self.data_array is None:
+                    self.data_array=array
+                else:
+                    self.data_array=np.vstack([self.data_array,array])
+        self.x = np.arange(-1 * int(len(lines)/2), 0, 1)
+        print(self.data_array.shape)
+        self.data_rate=1
+        self.read=True
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.update_window)
+        self.timer.start(50)
 
     def add_data_to_file(self):
 
