@@ -417,10 +417,25 @@ class Ui_MainWindow(object):
 "color: rgb(255, 255, 255);\n"
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
+        
         self.phase_indicator.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout.addWidget(self.phase_indicator)
 
+        self.system_indicator = QLabel(self.centralwidget)
+        self.system_indicator.setObjectName(u"system_indicator")
+        sizePolicy2.setHeightForWidth(self.system_indicator.sizePolicy().hasHeightForWidth())
+        self.system_indicator.setSizePolicy(sizePolicy2)
+        self.system_indicator.setMinimumSize(QSize(0, 32))
+        self.system_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
+"background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+        
+        self.system_indicator.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout.addWidget(self.system_indicator)
 
         self.gridLayout_2.addLayout(self.verticalLayout, 0, 1, 1, 1)
 
@@ -484,6 +499,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Mission Time", None))
         self.on_time.setText(QCoreApplication.translate("MainWindow", u"  000:00.000  ", None))
         self.phase_indicator.setText(QCoreApplication.translate("MainWindow", u"Phase: 1", None))
+        self.system_indicator.setText(QCoreApplication.translate("MainWindow", u"Data", None))
         self.print_debug.setText(QCoreApplication.translate("MainWindow", u"none", None))
     # retranslateUi
 

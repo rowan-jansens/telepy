@@ -209,13 +209,21 @@ class MainWindow(QtWidgets.QMainWindow):
             phase_labels = ["IDLE", "ARMED", "ASCENT", "APOGEE", "DECENT"]
             phase_colors = ["85, 156, 242", "232, 21, 21", "224, 104, 29", "214, 61, 217", "61, 217, 82"]
 
-
-
             self.ui.phase_indicator.setText(phase_labels[int(self.line[15])-1])
             
             self.ui.phase_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
 "background-color: rgb(" + phase_colors[int(self.line[15])-1]  + ");\n"
 "color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+            
+            system_labels = ["sample1", "sample2", "sample3"]
+            
+            self.ui.system_indicator.setText(system_labels[int(self.line[28])-1])
+
+            self.ui.system_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
+"background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);\n"
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
 
