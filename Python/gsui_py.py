@@ -330,7 +330,7 @@ class Ui_MainWindow(object):
         self.gridLayout_6.addWidget(self.save_data_option, 2, 0, 1, 2)
 
 
-        self.gridLayout_2.addLayout(self.gridLayout_6, 0, 4, 1, 1)
+        self.gridLayout_2.addLayout(self.gridLayout_6, 0, 5, 1, 1)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setSpacing(16)
@@ -374,7 +374,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
 
 
-        self.gridLayout_2.addLayout(self.horizontalLayout_3, 0, 2, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_3, 0, 3, 1, 1)
+
+        # main column containing all the other columns
+
+        self.main_vertical_layout = QVBoxLayout()
+        
+        # First column on UI showing mission time, phase, etc
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setSpacing(4)
@@ -395,7 +401,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_5)
 
         self.on_time = QLabel(self.centralwidget)
-        self.on_time.setObjectName(u"on_time")
+        self.on_time.setObjectName(u"on_time")  
         sizePolicy2.setHeightForWidth(self.on_time.sizePolicy().hasHeightForWidth())
         self.on_time.setSizePolicy(sizePolicy2)
         self.on_time.setStyleSheet(u"font: 20pt \"Calibri\";\n"
@@ -427,7 +433,7 @@ class Ui_MainWindow(object):
         sizePolicy2.setHeightForWidth(self.system_indicator.sizePolicy().hasHeightForWidth())
         self.system_indicator.setSizePolicy(sizePolicy2)
         self.system_indicator.setMinimumSize(QSize(0, 32))
-        self.system_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
+        self.system_indicator.setStyleSheet(u"font: 14pt \"Calibri\";\n"
 "background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);\n"
 "selection-background-color: rgb(188, 214, 255);\n"
@@ -436,8 +442,75 @@ class Ui_MainWindow(object):
         self.system_indicator.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout.addWidget(self.system_indicator)
-
         self.gridLayout_2.addLayout(self.verticalLayout, 0, 1, 1, 1)
+
+        # UI for Error Codes
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setSpacing(4)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.setup_message = QLabel(self.centralwidget)
+        self.setup_message.setObjectName(u"setup_message")
+        sizePolicy2.setHeightForWidth(self.setup_message.sizePolicy().hasHeightForWidth())
+        self.setup_message.setSizePolicy(sizePolicy2)
+        self.setup_message.setMinimumSize(QSize(0, 32))
+        self.setup_message.setStyleSheet(u"font: 14pt \"Calibri\";\n"
+"background-color: rgb(85, 170, 0);\n"
+"color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+        
+        self.setup_message.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.setup_message)
+
+        self.IMU_error = QLabel(self.centralwidget)
+        self.IMU_error.setObjectName(u"IMU_error")
+        sizePolicy2.setHeightForWidth(self.IMU_error.sizePolicy().hasHeightForWidth())
+        self.IMU_error.setSizePolicy(sizePolicy2)
+        self.IMU_error.setMinimumSize(QSize(0, 32))
+        self.IMU_error.setStyleSheet(u"font: 14pt \"Calibri\";\n"
+"background-color: rgb(85, 170, 0);\n"
+"color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+        
+        self.IMU_error.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.IMU_error)
+
+        self.altimeter_error = QLabel(self.centralwidget)
+        self.altimeter_error.setObjectName(u"altimeter_error")
+        sizePolicy2.setHeightForWidth(self.altimeter_error.sizePolicy().hasHeightForWidth())
+        self.altimeter_error.setSizePolicy(sizePolicy2)
+        self.altimeter_error.setMinimumSize(QSize(0, 32))
+        self.altimeter_error.setStyleSheet(u"font: 14pt \"Calibri\";\n"
+"background-color: rgb(85, 170, 0);\n"
+"color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+        
+        self.altimeter_error.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.altimeter_error)
+
+        self.GPS_error = QLabel(self.centralwidget)
+        self.GPS_error.setObjectName(u"GPS_error")
+        sizePolicy2.setHeightForWidth(self.GPS_error.sizePolicy().hasHeightForWidth())
+        self.GPS_error.setSizePolicy(sizePolicy2)
+        self.GPS_error.setMinimumSize(QSize(0, 32))
+        self.GPS_error.setStyleSheet(u"font: 14pt \"Calibri\";\n"
+"background-color: rgb(85, 170, 0);\n"
+"color: rgb(255, 255, 255);\n"
+"selection-background-color: rgb(188, 214, 255);\n"
+"border-radius: 10px;")
+        
+        self.GPS_error.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.GPS_error)
+
+        #
+
+        self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 2, 1, 1)
 
         self.print_debug = QLabel(self.centralwidget)
         self.print_debug.setObjectName(u"print_debug")
@@ -457,6 +530,9 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
+
+
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -499,7 +575,10 @@ class Ui_MainWindow(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Mission Time", None))
         self.on_time.setText(QCoreApplication.translate("MainWindow", u"  000:00.000  ", None))
         self.phase_indicator.setText(QCoreApplication.translate("MainWindow", u"Phase: 1", None))
-        self.system_indicator.setText(QCoreApplication.translate("MainWindow", u"Data", None))
+        self.setup_message.setText(QCoreApplication.translate("MainWindow", u"Setup", None))
+        self.IMU_error.setText(QCoreApplication.translate("MainWindow", u"IMU", None))
+        self.altimeter_error.setText(QCoreApplication.translate("MainWindow", u"Altimeter", None))
+        self.GPS_error.setText(QCoreApplication.translate("MainWindow", u"GPS", None))
         self.print_debug.setText(QCoreApplication.translate("MainWindow", u"none", None))
     # retranslateUi
 

@@ -151,7 +151,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.data_array = np.zeros([self.data_buffer, self.data_entries], dtype = np.float64)
         self.x = np.arange(-1 * self.data_buffer, 0, 1)
 
-        
 
 
 
@@ -298,10 +297,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.print_status("Data Saved")
         
 
-
-
-
-
+    def check_for_errors(self):
+        '''Read the error data point and change the BGcolour of corresponding UI widgets according to their status'''
+        
         
 
 if __name__ == "__main__":
