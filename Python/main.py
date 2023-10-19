@@ -216,15 +216,9 @@ class MainWindow(QtWidgets.QMainWindow):
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
             
-            system_labels = ["sample1", "sample2", "sample3"]
+            self.check_for_errors()
             
-            self.ui.system_indicator.setText(system_labels[int(self.line[28])-1])
 
-            self.ui.system_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
-"background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);\n"
-"selection-background-color: rgb(188, 214, 255);\n"
-"border-radius: 10px;")
 
         self.update_plot("x_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,1])
         self.update_plot("y_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,2])
@@ -299,6 +293,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def check_for_errors(self):
         '''Read the error data point and change the BGcolour of corresponding UI widgets according to their status'''
+        
+        errors_list = [self.ui.IMU_error.setStyleSheet, self.ui.altimeter_error.setStyleSheet, self.ui.GPS_error.setStyleSheet, "four", "five", "six", "seven", self.ui.setup_message.setStyleSheet]
+        
+        current_errors = []
+
+        # format the input integer into binary and flip it as the loop runs from left to right
+        error_binary = "{0:08b}".format(int(self.line[28]))[::-1]
+
+        # loop to go through every bit
+        for i in range(len(error_binary)):
+            
+            # check the bit value is 1, meaning there is an error, and changing the BG color to red
+            if error_binary(i):
+                errors_list[i]("font: 14pt 'Calibri';\n"
+                                    "background-color: rgb(255, 0, 0);\n"
+                                    "color: rgb(255, 255, 255);\n"
+                                    "selection-background-color: rgb(188, 214, 255);\n"
+                                    "border-radius: 10px;")
+                
+            # else keep the BG color green
+            else:   
+                errors_list[i]("font: 14pt 'Calibri';\n"
+                                    "background-color: rgb(85, 170, 0);\n"
+                                    "color: rgb(255, 255, 255);\n"
+                                    "selection-background-color: rgb(188, 214, 255);\n"
+                                    "border-radius: 10px;")
         
         
 

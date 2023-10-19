@@ -427,21 +427,6 @@ class Ui_MainWindow(object):
         self.phase_indicator.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout.addWidget(self.phase_indicator)
-
-        self.system_indicator = QLabel(self.centralwidget)
-        self.system_indicator.setObjectName(u"system_indicator")
-        sizePolicy2.setHeightForWidth(self.system_indicator.sizePolicy().hasHeightForWidth())
-        self.system_indicator.setSizePolicy(sizePolicy2)
-        self.system_indicator.setMinimumSize(QSize(0, 32))
-        self.system_indicator.setStyleSheet(u"font: 14pt \"Calibri\";\n"
-"background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);\n"
-"selection-background-color: rgb(188, 214, 255);\n"
-"border-radius: 10px;")
-        
-        self.system_indicator.setAlignment(Qt.AlignCenter)
-
-        self.verticalLayout.addWidget(self.system_indicator)
         self.gridLayout_2.addLayout(self.verticalLayout, 0, 1, 1, 1)
 
         # UI for Error Codes
@@ -468,6 +453,7 @@ class Ui_MainWindow(object):
         sizePolicy2.setHeightForWidth(self.IMU_error.sizePolicy().hasHeightForWidth())
         self.IMU_error.setSizePolicy(sizePolicy2)
         self.IMU_error.setMinimumSize(QSize(0, 32))
+
         self.IMU_error.setStyleSheet(u"font: 14pt \"Calibri\";\n"
 "background-color: rgb(85, 170, 0);\n"
 "color: rgb(255, 255, 255);\n"
