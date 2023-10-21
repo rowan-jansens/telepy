@@ -299,14 +299,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # Show the current errors
         current_errors = [0, 0, 0, 0, 0, 0, 0, 0]
 
-        # Format the input integer into binary and flip it as the loop runs from left to right
+        # Format the input integer into binary and flip it as the binary should be from left to right
         error_binary = "{0:08b}".format(int(self.line[28]))[::-1]
 
         # Loop to go through every bit
         for i in range(len(error_binary)):
             
             # Check if the bit value is 1, meaning there is an error, and change the BG color to red
-            if error_binary(i) :
+            if error_binary(i):
                 errors_list[i]("font: 14pt 'Calibri';\n"
                                     "background-color: rgb(255, 0, 0);\n"
                                     "color: rgb(255, 255, 255);\n"
