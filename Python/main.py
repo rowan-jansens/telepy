@@ -91,7 +91,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.status_timer = QtCore.QTimer()
         self.status_timer.timeout.connect(self.clear_status)
         
-
+        self.errors_list = {0:self.ui.IMU_error, 1:self.ui.altimeter_error, 2:self.ui.GPS_error, 7:self.ui.setup_message}
+        
+        # Show the current errors
+        self.current_errors = [0, 0, 0, 0, 0, 0, 0, 0]
 
 
         for i in range(len(plot_LUT)):
@@ -146,7 +149,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def init_data(self):
-        self.data_entries = 28
+        self.data_entries = 29
         self.data_buffer  = 300
         self.data_array = np.zeros([self.data_buffer, self.data_entries], dtype = np.float64)
         self.x = np.arange(-1 * self.data_buffer, 0, 1)
@@ -247,7 +250,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #plot other textual telemetry elements
         self.ui.on_time.setText("  " + str(on_time_minutes) + ":" + format(on_time_seconds, '.2f') + "  ")
-        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n" + str(round(self.line[17], 2)) + "v\n" + str(self.line[27]) + "%")
+        self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n" + str(round(self.line[17], 2)) + "v\n" + str(self.line[-1]) + "%")
 
         pyro_code = str(int(self.line[16]))
     
@@ -294,20 +297,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def check_for_errors(self):
         '''Read the error data point and change the BGcolour of corresponding UI widgets according to their status'''
         
-        errors_list = [self.ui.IMU_error.setStyleSheet, self.ui.altimeter_error.setStyleSheet, self.ui.GPS_error.setStyleSheet, "four", "five", "six", "seven", self.ui.setup_message.setStyleSheet]
-        
-        # Show the current errors
-        self.current_errors = [0, 0, 0, 0, 0, 0, 0, 0]
 
         # Format the input integer into binary and flip it as the binary should be from left to right
-        self.error_binary = "{0:08b}".format(int(self.line[28]))[::-1]
+        self.error_binary = list("{0:08b}".format(int(self.line[27]))[::-1])
 
         # Loop to go through every bit
-        for i in range(len(self.error_binary)):
+        for i, error in self.errors_list.items():
             
             # Check if the bit value is 1, meaning there is an error, and change the BG color to red
-            if self.error_binary(i):
-                errors_list[i]("font: 14pt 'Calibri';\n"
+            if int(self.error_binary[i]):
+                error.setStyleSheet("font: 14pt 'Calibri';\n"
                                     "background-color: rgb(255, 0, 0);\n"
                                     "color: rgb(255, 255, 255);\n"
                                     "selection-background-color: rgb(188, 214, 255);\n"
@@ -317,17 +316,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.current_errors[i] = 40
                 
             # If the timer runs out and there is no error, the BG color would change back to green
-            elif self.error_binary[i] == 0 and self.current_errors[i] == 0:
-                errors_list[i]("font: 14pt 'Calibri';\n"
+            elif int(self.error_binary[i]) == 0 and self.current_errors[i] <= 0:
+                error.setStyleSheet("font: 14pt 'Calibri';\n"
                                     "background-color: rgb(85, 170, 0);\n"
                                     "color: rgb(255, 255, 255);\n"
                                     "selection-background-color: rgb(188, 214, 255);\n"
                                     "border-radius: 10px;")
-        
         # Decrease the counter by one
         for i in self.current_errors:
-            if i != 0:
+            if not i == 0:
                 i -= 1
+                
 
 
         
