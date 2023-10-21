@@ -297,16 +297,16 @@ class MainWindow(QtWidgets.QMainWindow):
         errors_list = [self.ui.IMU_error.setStyleSheet, self.ui.altimeter_error.setStyleSheet, self.ui.GPS_error.setStyleSheet, "four", "five", "six", "seven", self.ui.setup_message.setStyleSheet]
         
         # Show the current errors
-        current_errors = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.current_errors = [0, 0, 0, 0, 0, 0, 0, 0]
 
         # Format the input integer into binary and flip it as the binary should be from left to right
-        error_binary = "{0:08b}".format(int(self.line[28]))[::-1]
+        self.error_binary = "{0:08b}".format(int(self.line[28]))[::-1]
 
         # Loop to go through every bit
-        for i in range(len(error_binary)):
+        for i in range(len(self.error_binary)):
             
             # Check if the bit value is 1, meaning there is an error, and change the BG color to red
-            if error_binary(i):
+            if self.error_binary(i):
                 errors_list[i]("font: 14pt 'Calibri';\n"
                                     "background-color: rgb(255, 0, 0);\n"
                                     "color: rgb(255, 255, 255);\n"
@@ -314,10 +314,10 @@ class MainWindow(QtWidgets.QMainWindow):
                                     "border-radius: 10px;")
                 
                 # The number of times the loop runs before the error stops displaying 
-                current_errors[i] = 40
+                self.current_errors[i] = 40
                 
             # If the timer runs out and there is no error, the BG color would change back to green
-            elif error_binary[i] == 0 and current_errors[i] == 0:
+            elif self.error_binary[i] == 0 and self.current_errors[i] == 0:
                 errors_list[i]("font: 14pt 'Calibri';\n"
                                     "background-color: rgb(85, 170, 0);\n"
                                     "color: rgb(255, 255, 255);\n"
@@ -325,7 +325,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                     "border-radius: 10px;")
         
         # Decrease the counter by one
-        for i in current_errors:
+        for i in self.current_errors:
             if i != 0:
                 i -= 1
 
