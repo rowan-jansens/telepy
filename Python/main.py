@@ -106,23 +106,32 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     def open_serial(self):
-        try:
-            self.init_data()
-            self.ser = serial.Serial(self.ui.serial_port.currentText(), int(self.ui.serial_baud.currentText()))  # change COM# if necessary
-            time.sleep(1)
-            test_byte = ord(self.ser.read(1))
-            if test_byte == 64:
-                self.print_status("Connection sucessfull")
-                time.sleep(2)
-                self.ser.flushInput
-                self.timer = QtCore.QTimer()
-                self.timer.timeout.connect(self.fetch_serial_data)
-                self.timer.start(50)
-            else:
-                self.print_status("Connection failed!")
-                self.ser.close()
-        except:
-            self.print_status("Connection failed!")
+        # try:
+        #     self.init_data()
+        #     self.ser = serial.Serial(self.ui.serial_port.currentText(), int(self.ui.serial_baud.currentText()))  # change COM# if necessary
+        #     time.sleep(1)
+        #     test_byte = ord(self.ser.read(1))
+        #     if test_byte == 64:
+        #         self.print_status("Connection sucessfull")
+        #         time.sleep(2)
+        #         self.ser.flushInput
+        #         self.timer = QtCore.QTimer()
+        #         self.timer.timeout.connect(self.fetch_serial_data)
+        #         self.timer.start(50)
+        #     else:
+        #         self.print_status("Connection failed!")
+        #         self.ser.close()
+        # except:
+        #     self.print_status("Connection failed!")
+        self.init_data()
+        self.globalLines = 0
+
+        with open("test.txt") as textFile:
+            self.content = textFile.readlines()
+
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.fetch_serial_data)
+        self.timer.start(50)
 
 
 
@@ -144,8 +153,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def init_data(self):
-        self.data_entries = 28
-        self.data_buffer  = 300
+        self.data_entries = 28 #update when you change the number of stuff you want to send
+        self.data_buffer  = 300 #number of packes to save in RAM before we save to SD
         self.data_array = np.zeros([self.data_buffer, self.data_entries], dtype = np.float64)
         self.x = np.arange(-1 * self.data_buffer, 0, 1)
 
@@ -156,30 +165,39 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def fetch_serial_data(self):
 
-        # read lines
-        while (self.ser.in_waiting > 0):
-            self.line = self.ser.readline()
-            self.num_lines_read += 1
 
-            # decode line and append to buffer
-            self.line = np.asarray(self.line.decode().rstrip('\n').split(","), dtype=np.single)
-            self.data_array = np.append(self.data_array, [self.line], axis=0)
 
-            #update data array using current buffer size set by slider
-            self.data_array = self.data_array[1:, :]
-            self.data_rate = (int(1 / ((np.mean(np.diff(self.data_array[180:, 0]))) / 1000)))
+        
+            
+                
 
-            # check for zero data rate
-            if self.data_rate == 0:
-                self.data_rate = 1
+            # read lines
+            # while (self.ser.in_waiting > 0):
+                # self.line = self.ser.readline()
+                self.line = self.content[self.globalLines]
+                self.num_lines_read += 1
+                self.globalLines += 1
 
-            # check for save state condition
-            if self.num_lines_read > self.data_buffer:
-                self.add_data_to_file()
+                # decode line and append to buffer
+                # self.line = np.asarray(self.line.decode().rstrip('\n').split(","), dtype=np.single)
+                self.line = np.asarray(self.line.rstrip('\n').split(","), dtype=np.single)
+                self.data_array = np.append(self.data_array, [self.line], axis=0)
+
+                #update data array using current buffer size set by slider
+                self.data_array = self.data_array[1:, :]
+                self.data_rate = (int(1 / ((np.mean(np.diff(self.data_array[180:, 0]))) / 1000)))
+
+                # check for zero data rate
+                if self.data_rate == 0:
+                    self.data_rate = 1
+
+                # check for save state condition
+                if self.num_lines_read > self.data_buffer:
+                    self.add_data_to_file()
 
             
         # print(self.num_lines_read)
-        self.update_window()
+                self.update_window()
 
     def print_status(self, text):
         if text != "#return#":
@@ -202,21 +220,19 @@ class MainWindow(QtWidgets.QMainWindow):
         speed_scale = self.ui.plot_speed.value()
 
         if (self.num_lines_read%1) == 0:
-            phase_color = np.random.normal(120, 30, 3)
-
+    
+            #displaying the phase
             phase_labels = ["IDLE", "ARMED", "ASCENT", "APOGEE", "DECENT"]
             phase_colors = ["85, 156, 242", "232, 21, 21", "224, 104, 29", "214, 61, 217", "61, 217, 82"]
-
-
-
-            self.ui.phase_indicator.setText(phase_labels[int(self.line[15])-1])
-            
+            self.ui.phase_indicator.setText(phase_labels[int(self.line[15])-1])  
             self.ui.phase_indicator.setStyleSheet(u"font: 20pt \"Calibri\";\n"
 "background-color: rgb(" + phase_colors[int(self.line[15])-1]  + ");\n"
 "color: rgb(255, 255, 255);\n"
 "selection-background-color: rgb(188, 214, 255);\n"
 "border-radius: 10px;")
+            
 
+        #update plots
         self.update_plot("x_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,1])
         self.update_plot("y_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,2])
         self.update_plot("z_accel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,3])
@@ -227,7 +243,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_plot("y_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,9])
         self.update_plot("z_ang", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,10])
         self.update_plot("temp", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,7])
-
         self.update_plot("trigger_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,20])
         self.update_plot("trigger_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,19])
 
@@ -238,6 +253,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_plot("kf_alt", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,21])
         self.update_plot("kf_vel", self.x[-speed_scale:] / self.data_rate, self.data_array[-speed_scale:,24])
 
+
+
         on_time_seconds = round((self.line[0] / 1000) % 60, 3)
         on_time_minutes = math.floor((self.line[0] / (1000*60))) % 60
        
@@ -247,7 +264,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.stats_1.setText(str(round(self.data_rate)) +"Hz\n" + str(round((self.data_array[-1,0] - self.data_array[-2,0]) / 10 )*10) + "ms\n" + str(round(self.line[17], 2)) + "v\n" + str(self.line[27]) + "%")
 
         pyro_code = str(int(self.line[16]))
-    
         pyro_one_state = pyro_code[2]
         pyro_two_state = pyro_code[1]
         arm_state = pyro_code[3]
