@@ -322,12 +322,13 @@ class MainWindow(QtWidgets.QMainWindow):
                                     "color: rgb(255, 255, 255);\n"
                                     "selection-background-color: rgb(188, 214, 255);\n"
                                     "border-radius: 10px;")
-        # Decrease the counter by one
-        for i in self.current_errors:
-            if not i == 0:
-                i -= 1
                 
-
+        # Decrease the counter by one
+        for i in range(len(self.current_errors)):
+            if self.current_errors[i] != 0:
+                self.current_errors[i] -= 1
+                
+            
 
         
 if __name__ == "__main__":
