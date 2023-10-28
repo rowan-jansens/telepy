@@ -276,7 +276,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.data_in_file = 0
                 time_struct = time.gmtime()
                 file_name = "log_files/" + str(time_struct.tm_mon) + "_" + str(time_struct.tm_mday) + "_" + str(round(time.time()))[-5:-1] + ".txt"
-                if not os.path.exists("logfiles/"):
+                if not os.path.exists("log_files/"):
                     os.mkdir("log_files/")
                 with open(file_name, 'w') as f:
                     f.write("time,ax,ay,az,gx,gy,gz,\n")
